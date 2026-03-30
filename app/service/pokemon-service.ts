@@ -3,7 +3,6 @@ import { fetcher, pokeApiUrl } from "../lib/api/fetcher";
 import { PokemonListResponse, Pokemon } from "../types/pokemon-types";
 import { PokemonSpecies, EvolutionChainResponse } from "../types/pokemon-types";
 
-
 // use URLSearchParams to put limit and offset
 export async function fetchPokemonList(
   offset: number = OFFSET,
@@ -17,7 +16,9 @@ export async function fetchPokemonList(
   return fetcher<PokemonListResponse>(url);
 }
 
-export async function fetchPokemonSpecies(name: string): Promise<PokemonSpecies> {
+export async function fetchPokemonSpecies(
+  name: string,
+): Promise<PokemonSpecies> {
   const pokemonBase = pokeApiUrl();
   const speciesBase = pokemonBase.replace(/pokemon\/?$/, "pokemon-species/");
   const url = `${speciesBase}${encodeURIComponent(name)}`;
@@ -43,4 +44,10 @@ export function getPokemonIdFromUrl(url: string): number {
     throw new Error("Invalid pokemon URL");
   }
   return Number(match[1]);
+}
+
+export async function fetchPokemonSearchIndex(): Promise<PokemonListResponse> {
+  const first = await fetchPokemonList(0, 1);
+  const total = first.count;
+  return fetchPokemonList(0, total);
 }
