@@ -14,13 +14,6 @@ export function collectLinearSpeciesNames(node: EvolutionChainLink): string[] {
   return names.concat(collectLinearSpeciesNames(next));
 }
 
-/**
- * 푸터 3칸: 이름 또는 null(null이면 칸 비움).
- * - 진화 1마리: [이름, null, null]
- * - 1단계: [1, 2, 3] — 없는 단계는 null
- * - 중간: [이전, 현재, 다음]
- * - 마지막: 체인 끝 세 칸 — 부족하면 앞을 null (2단계만 있으면 [null, 1, 2])
- */
 export function footerEvolutionTriplet(
   linearNames: string[],
   currentName: string,
@@ -38,11 +31,7 @@ export function footerEvolutionTriplet(
   }
 
   if (i === 0) {
-    return [
-      linearNames[0],
-      linearNames[1],
-      n >= 3 ? linearNames[2] : null,
-    ];
+    return [linearNames[0], linearNames[1], n >= 3 ? linearNames[2] : null];
   }
 
   if (i === n - 1) {
